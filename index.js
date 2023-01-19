@@ -70,7 +70,7 @@ app.post('/api/shorturl', async (req, res) => {
   }
   result.original_url = urlDB.url_original;
   result.short_url = urlDB.url_short;
-  res.send(result)
+  res.json(result)
 })
 
 app.get('/api/shorturl/:short', async (req, res) => {

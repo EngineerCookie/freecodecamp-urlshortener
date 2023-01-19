@@ -43,15 +43,13 @@ app.get('/api/hello', function (req, res) {
 });
 
 app.post('/api/shorturl', async (req, res) => {
-  let result = {"original_url": undefined, "short_url": undefined};
   let invalidUrl = { "error": 'invalid url' }; 
   let invalidHost = { "error": "invalid Hostname"};
   let inputUrl = req.body.url;
-  let regex = /^(http|https):\/\/(w{3}\.)*([\w]+\.[\w]+)/;
+  let regex = /^(http|https):\/\/(w{3}\.)*[\w]+\.[\w]+/;
 
   if (regex.test(inputUrl) == false) {return res.send(invalidUrl)};
   let dnsUrl = new URL(inputUrl).hostname;
-  console.log(dnsUrl);
   dns.lookup(dnsUrl, (error, address, family) => {
     if (error) {return res.send(invalidHost);}
   });
@@ -68,8 +66,7 @@ app.post('/api/shorturl', async (req, res) => {
     })
     urlDB = entry;
   }
-  result.original_url = urlDB.url_original;
-  result.short_url = urlDB.url_short;
+  let result = {"original_url": urlDB.url_original, "short_url": urlDB.url_short};
   res.json(result)
 })
 

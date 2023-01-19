@@ -65,12 +65,9 @@ app.post('/api/shorturl', async (req, res) => {
     };
     urlModel.create(entry, (err, data) => {
       if(err) {return console.error(err)}
-      //console.log(data)
     })
     urlDB = entry;
-    //console.log(urlDB)
   }
-  console.log(urlDB.url_original)
   result.original_url = urlDB.url_original;
   result.short_url = urlDB.url_short;
   res.send(result)

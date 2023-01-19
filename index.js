@@ -57,17 +57,20 @@ app.post('/api/shorturl', async (req, res) => {
   });
 
   let urlDB = await urlModel.findOne({url_original: inputUrl});
-
-  if (urlDB == '') {
+  if (await urlDB == null) {
     let lastIndex = await urlModel.findOne({}).sort({url_short: -1});
-    let entry = new urlModel({
+    let entry = {
       url_original: inputUrl,
       url_short: lastIndex.url_short + 1
-    });
-    entry.save((err, data) => {if(err){return console.error(err)}});
-    urlDB = await urlModel.find({url_original: inputUrl});
-    console.log(urlDB)
+    };
+    urlModel.create(entry, (err, data) => {
+      if(err) {return console.error(err)}
+      //console.log(data)
+    })
+    urlDB = entry;
+    //console.log(urlDB)
   }
+  console.log(urlDB.url_original)
   result.original_url = urlDB.url_original;
   result.short_url = urlDB.url_short;
   res.send(result)

@@ -50,8 +50,9 @@ app.post('/api/shorturl', async (req, res) => {
   let regex = /^(http|https):\/\/(w{3}\.)*([\w]+\.[\w]+)/;
 
   if (regex.test(inputUrl) == false) {return res.send(invalidUrl)};
-
-  dns.lookup(inputUrl.match(regex)[3], (error, address, family) => {
+  let dnsUrl = new URL(inputUrl).hostname;
+  console.log(dnsUrl);
+  dns.lookup(dnsUrl, (error, address, family) => {
     if (error) {return res.send(invalidHost);}
   });
 

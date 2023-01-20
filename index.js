@@ -46,10 +46,11 @@ app.post('/api/shorturl', async (req, res) => {
   let invalidUrl = { "error": 'invalid url' }; 
   let invalidHost = { "error": "invalid Hostname"};
   let inputUrl = req.body.url;
-  let regex = /^(http|https):\/\/(w{3}\.)*[\w]+\.[\w]+/;
+  let regex = /^(http|https):\/\/(w{3}\.)*.+/;
 
   if (regex.test(inputUrl) == false) {return res.send(invalidUrl)};
   let dnsUrl = new URL(inputUrl).hostname;
+  console.log(dnsUrl)
   dns.lookup(dnsUrl, (error, address, family) => {
     if (error) {return res.send(invalidHost);}
   });
